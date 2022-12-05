@@ -1,0 +1,120 @@
+/* css */
+
+body{background:#d4dfeb; transition:background .3s;}
+
+.body_wrap{width:80%; max-width:1000px; margin:5.625rem auto; background:#f1f4f6; border-radius:3.125rem; box-shadow:20px 20px 20px rgba(182,199,219,0.7); box-sizing:border-box; overflow:hidden; transition: all .3s;}
+
+
+header{padding:5rem 4.375rem 4.375rem; transition:padding .3s;}
+header h1{color:#648098;}
+header h1 strong{display: block; font-size:2.5rem; font-weight:700; transition:font-size .3s;}
+header h1 p{font-size:1.15rem; font-weight:300;}
+
+header .enter_area{display:flex; justify-content : space-between; border-bottom:1px solid rgba(100,128,152,0.5); margin:4.375rem 0 0; font-size:1.05rem;}
+header .enter_area label{position:absolute; left:-9999%; top: 0; width: 1px; height: 1px; color:#fff; overflow: hidden;}
+header .enter_area input{flex:1 1 auto; letter-spacing:-0.025rem;}
+header .enter_area button{flex:0 0 3.125rem;}
+header .enter_area input,
+header .enter_area button{height:3.125rem; line-height:3.125rem; box-sizing:border-box; color:#648098; background:transparent; outline:none;}
+
+header .warning{margin:1rem 0 0; color:rgba(255,0,0,.6); letter-spacing:-0.025rem; display: none;}
+header .warning::before{content:'!'; display:inline-block; width: 0.875rem; height: 0.875rem; line-height: 0.875rem; font-size:.85rem; text-align:center; border-radius:500px; border:1px solid rgba(255,0,0,.6); color:rgba(255,0,0,.6); margin-right:0.5rem;}
+
+
+.list_area{background:#fff; padding:3.75rem; border-radius:0 3.125rem 0 0; box-shadow:0 0 20px rgba(182,199,219,0.3);}
+.list_area dl{}
+.list_area dl dd{display:flex; justify-content: space-between; gap:1rem; align-items:flex-start; padding:1.0625rem; transition:background 0.3s; border-bottom:1px dashed #eee;}
+.list_area dl dd + dd{/*margin-top:30px;*/}
+.list_area dl dd:hover{background:#f2f2f2;}
+
+.list_area .notice{color:#999; padding:1rem;}
+
+.list_area dl dd .chk{}
+.list_area dl dd .chk input {position:absolute; left:-9999%; top:0; width:0; height:0; font-size:0; visibility:hidden;}
+.list_area dl dd .chk input + label {display:block; height: 24px;}
+.list_area dl dd .chk input + label:before {content:''; display:inline-block; width:24px; height:24px; margin:2px 0; border-radius:500px; border:2px solid rgba(0,0,0,0.2); box-sizing:border-box;}
+.list_area dl dd .chk input:checked + label{}
+.list_area dl dd .chk input:checked + label:before {background:url(images/ico_chk.png) 50% 50% no-repeat #a4c0d9; background-size:54% auto; border:0 none;}
+
+.list_area dl dd .cont{flex:1 1 auto; line-height:1.8; letter-spacing:-0.025rem; text-align: justify; word-break: break-all;}
+
+.list_area dl dd .fuct{display: flex;}
+.list_area dl dd .fuct button{width:20px; text-align:center; font-size:1.125rem; opacity:0.3; transition:opacity 0.3s;}
+.list_area dl dd .fuct .btn_modify{}
+.list_area dl dd .fuct .btn_del{margin-left:10px;}
+.list_area dl dd .fuct .btn_modify:hover,
+.list_area dl dd .fuct .btn_del:hover{opacity:0.8;}
+
+/* checked */
+.list_area dl dd.chked{}
+.list_area dl dd.chked .cont{text-decoration:line-through; font-style: italic; opacity:.3;}
+
+/* 수정 시 */
+.list_area dl dd.modify{align-items:center; background:rgba(182,199,219,0.5); border-radius:15px; border:0 none; box-shadow:5px 5px 15px 1px rgba(0,0,0,0.1)}
+.list_area dl dd.modify .cont{background:#fff; display: flex; padding:0 1rem; gap:1rem; border-radius:5px;
+opacity:1; font-style:normal; text-decoration: none; overflow: hidden;}
+.list_area dl dd.modify .cont input{flex:1 0 1%; width: 1%;}
+.list_area dl dd.modify .cont input,
+.list_area dl dd.modify .cont button{height: 40px; line-height: 40px;}
+.list_area dl dd.modify .cont button{flex:0 0 40px; color:#648098;}
+
+
+
+/* del check */
+.delchk{position:fixed; left: 50%; top: 50%; width: 350px; transform:translate(-50%, -50%); box-sizing:border-box; background:#fff; border-radius:15px; box-shadow:5px 5px 25px 5px rgba(0,0,0,0.5); overflow: hidden; z-index:55; transition:width .3s; display: none;}
+.delchk::after{content:''; display: block; clear: both;}
+.delchk p{text-align:center; height: 100px; line-height: 100px;}
+.delchk button,
+.delchk a{float:left; width: 50%; height: 50px; line-height: 50px; border-top:1px solid #ddd; text-align:center; box-sizing:border-box; transition:background .3s;}
+.delchk a{border-left:1px solid #eee;}
+
+.delchk button:hover,
+.delchk a:hover{background:#ddd;}
+
+.delchk_bg{position:fixed; left: 0; top: 0; width: 100%; height: 100%; background:rgba(0,0,0,0.7); display: none;}
+
+
+
+
+
+
+
+
+
+
+
+@media all and (max-width: 1024px) {
+    .body_wrap{width: 90%; margin:3.125rem auto;}
+    
+}
+
+@media all and (max-width: 768px) {
+    body{background:#fff;}
+    .body_wrap{width: 100%; margin:0; border-top-left-radius:0; border-top-right-radius:0; box-shadow:none;}
+    header{padding:4rem 4rem 5rem;}
+    header .enter_area{margin:3rem 0 0;}
+    .list_area{padding:3.5rem 2rem;}
+}
+
+@media all and (max-width: 640px) {
+    body, html{font-size:14px;}
+    header{padding:3rem 3rem 4rem;}
+    .list_area{padding:2rem;}
+    .list_area dl dd{padding:1rem;}
+    /* .list_area dl dd:hover{background:none;} */
+    .list_area dl dd .chk input + label{height: 20px;}
+    .list_area dl dd .chk input + label:before {width: 20px; height: 20px;}
+    .list_area dl dd .fuct button{width: 18px;}
+}
+
+@media all and (max-width: 540px) {
+    .delchk{width: 80%;}
+    /* .list_area dl dd.modify .cont{}
+    .list_area dl dd.modify .cont input{}
+    .list_area dl dd.modify .cont button{} */
+
+}
+
+@media all and (max-width: 375px) {
+    .body_wrap{min-width: 375px;}
+}
