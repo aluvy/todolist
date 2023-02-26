@@ -77,6 +77,7 @@ const $todo = {
 
             document.querySelector(`#delete-${key}`).addEventListener("click", function(){ $todo.delete(key) } );
             document.querySelector(`#modify-${key}`).addEventListener("click", function(){ $todo.openModify(key, value) } );
+            document.querySelector(`#cb-${key}`).addEventListener("change", function(){ $todo.check(key) });
         })
     },
     chkValue: function(value){
@@ -101,6 +102,8 @@ const $todo = {
     },
     openModify: function(key, value){
         const elem = document.querySelector(`#item-${key}`);
+        if( elem.classList.value.includes("chked") ) return;
+
         const cont = elem.querySelector(".cont");
         const input = document.createElement("input");
         cont.innerText = '';
@@ -132,5 +135,10 @@ const $todo = {
         
         $todo.todos.forEach((e, i)=>{ if( e.id == key ) e.content = value })
         $todo.setTodo();
+    },
+    check: function(key){
+        const dd = document.querySelector(`#item-${key}`);
+        const checkbox = document.querySelector(`#cb-${key}`);
+        ( checkbox.checked ) ? dd.classList.add("chked") : dd.classList.remove("chked");
     }
 }
