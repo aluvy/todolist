@@ -1,145 +1,136 @@
 window.addEventListener("load", function(){
+    setTimeout(() => { window.scrollTo(0,0) }, 1);
 
-    var formArea = document.querySelector(".enter_area");
-    var input = formArea.querySelector("input[type='text']"); // input
-    var submit = formArea.querySelector("button[type='submit'"); // button
-    
-    var todolist = document.querySelector(".list_area dl"); // list
-    var template = document.querySelector("template");  // template
+    $todo.init();
 
-    var del_chk = document.querySelector('.delchk');
-    var del_chk_box = document.querySelector('.delchk_bg');
-    
-    var addcnt = 0;
-
-
-
-    submit.addEventListener('click', submit_function); // 버튼 클릭
-
-    function submit_function(e){
+    const submit = document.querySelector("#submit");
+    submit.addEventListener('click', function(e){
         e.preventDefault();
-
-        var newvalue = input.value; // value값을 저장
-
-        if (input.value !== ""){ // value가 비어있지 않으면
-            document.querySelector("form").style.borderColor = "";
-            document.querySelector('.warning').innerText = "";
-            document.querySelector('.warning').style.display = "none";
-            addText(newvalue);
-            input.value = ""; // 실제 value 비움
-
-        } else { // 비어있으면 경고
-            document.querySelector("form").style.borderColor = "rgba(255,0,0,.6)";
-            document.querySelector('.warning').style.display = "block";
-            document.querySelector('.warning').innerText = "내용을 입력하세요";
-        }
-        input.focus(); // input에 포커스
-    };
-
-    
-
-    function addText(newvalue){ // 리스트 추가하기
-
-        var newlist = document.createElement("dd");
-
-        var cloneNode = document.importNode(template.content, true);
-        var chkbox = cloneNode.querySelector(".chk");
-        var chkboxLabel = chkbox.querySelector("label");
-        var chkboxInput = chkbox.querySelector("input");
-
-        // checkbox 속성 변경
-        chkboxLabel.attributes.for.value = 'cb-' + addcnt;
-        chkboxInput.id = 'cb-' + addcnt;
-
-        // content 텍스트 변경
-        var spans = cloneNode.querySelector(".cont");
-        spans.innerHTML = newvalue;
-
-        // append
-        todolist.append(newlist);
-        newlist.append(cloneNode);
-
-
-        // 버튼 이벤트
-        var chkBtn = newlist.querySelector(".chk input");
-        var delBtn = newlist.querySelector(".btn_del");
-        var modifyBtn = newlist.querySelector(".btn_modify");
-        
-        chkBtn.addEventListener("click", check_function);
-        delBtn.addEventListener("click", del_function);
-        modifyBtn.addEventListener("click", modify_function);
-
-        addcnt++;
-    };
-
-
-
-
-    // checkbox
-    function check_function(e){
-        var mydd = this.parentElement.parentElement; // dd 선택
-
-        if(this.checked){
-            this.checked = true;
-            mydd.classList = ' chked';
-        } else {
-            this.checked = false;
-            mydd.classList.remove('chked');
-        }
-    }
-
-    
-
-    function del_function(e){
-        
-        var btn_del = this;
-
-        del_chk.style.display = "block";
-        del_chk_box.style.display = "block";
-
-        del_chk.querySelector('button').onclick = function(){
-            btn_del.parentElement.parentElement.remove();
-            del_chk.style.display="none";
-            del_chk_box.style.display="none";
-        }
-
-        // 아니오 클릭 시
-        del_chk.querySelector('a').onclick = function(e){
-            e.preventDefault();
-            
-            del_chk.style.display="none";
-            del_chk_box.style.display="none";
-        }
-    }
-
-
-    //수정하기
-    function modify_function(){
-
-        var modi_value = this.parentElement.parentElement.querySelector('.cont');
-
-            
-        // modify class 없으면 실행
-        if(modi_value.parentElement.classList == !' modify'){
-            
-            //console.log('hi2');
-            modi_value.parentElement.classList += ' modify'; //클래스 추가
-        
-            var modify_input = "<input type='text' value='"+ modi_value.innerText +"'><button type='button'>ok</button>";
-
-            modi_value.innerHTML = modify_input;
-            
-            
-            modi_value.querySelector('button').onclick = function() {
-                
-                var mody_input = modi_value.querySelector('input').value;
-                modi_value.parentElement.classList.remove('modify'); // 클래스 삭제
-                modi_value.innerText = mody_input;
-
-            }
-
-
-        }
-    }
+        $todo.submit()
+    });
 
 });
+
+const $todo = {
+    todos: [],
+    init: function(){
+        let localTodos = localStorage.getItem("todos");
+        if( localTodos == null ) return;
+        this.todos = JSON.parse(localStorage.getItem("todos"));
+        this.setHTML();
+    },
+    submit: function(){
+        const input = document.querySelector("#inputtxt");
+        const value = input.value;
+        const chk = this.chkValue(value);
+        if ( !chk ) return;
+
+        this.pushTodo(value);
+        input.value = "";
+        input.focus();
+    },
+    pushTodo: function(value){
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, 0);
+        let day = String(date.getDate()).padStart(2, 0);
+        let time = String(date.getHours()).padStart(2, 0);
+        let min = String(date.getMinutes()).padStart(2, 0);
+        let sec = String(date.getSeconds()).padStart(2, 0);
+        let msec = date.getMilliseconds();
+        let key = `${year}${month}${day}_${time}${min}${sec}${msec}`;
+        
+        this.todos.push({ "id": key, "content" : value });
+        this.setTodo();
+    },
+    setTodo: function(){
+        localStorage.setItem("todos", JSON.stringify(this.todos));
+        this.setHTML();
+    },
+    setHTML: function(){
+        let value = this.todos;
+        if( value == undefined || value == null || value.length < 0 ) return;
+
+        const todolist = document.querySelector("#todolist");
+        todolist.innerHTML = "";
+        this.todos.forEach((e, i)=>{
+            const dd = document.createElement("dd");
+            const key = e.id;
+            const value = e.content;
+            dd.setAttribute("id", `item-${key}`);
+            dd.innerHTML = `
+                <span class="chk">
+                    <input type="checkbox" id="cb-${key}">
+                    <label for="cb-${key}"></label>
+                </span>
+                <span class="cont">${value}</span>
+                <span class="fuct">
+                    <button type="button" class="btn_modify" id="modify-${key}">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                    <button type="button" class="btn_del" id="delete-${key}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </span>
+            `;
+            todolist.prepend(dd);
+
+            document.querySelector(`#delete-${key}`).addEventListener("click", function(){ $todo.delete(key) } );
+            document.querySelector(`#modify-${key}`).addEventListener("click", function(){ $todo.openModify(key, value) } );
+        })
+    },
+    chkValue: function(value){
+        const warning = document.querySelector(".warning");
+        if( value == '' ){
+            const form = document.querySelector("#form");
+            form.classList.add("error");
+            warning.innerText = '내용을 입력하세요';
+            return false;
+        } else {
+            form.classList.remove("error");
+            warning.innerText = '';
+            return true;
+        }
+    },
+    delete: function(key){
+        let result = confirm("해당 리스트를 삭제하시겠습니까?");
+        if( !result ) return;
+
+        $todo.todos.forEach((e, i)=>{ if( e.id == key ) $todo.todos.splice(i, 1) })
+        $todo.setTodo();
+    },
+    openModify: function(key, value){
+        const elem = document.querySelector(`#item-${key}`);
+        const cont = elem.querySelector(".cont");
+        const input = document.createElement("input");
+        cont.innerText = '';
+        input.setAttribute("type", "text");
+        input.setAttribute("id", `modiInput-${key}`);
+        input.setAttribute("value", value);
+        const buttonOk = document.createElement("button");
+        buttonOk.setAttribute("type", "button");
+        buttonOk.setAttribute("id", `modiok-${key}`);
+        buttonOk.innerText = "ok";
+        cont.append(input);
+        cont.append(buttonOk);
+        elem.classList.add("modify");
+        input.select();
+
+        input.addEventListener("input", function(){
+            value = document.querySelector(`#modiInput-${key}`).value;
+        });
+        input.addEventListener("keyup", function(e){
+            if( e.keyCode == 13 ) buttonOk.click()
+        })
+        buttonOk.addEventListener("click", function(){ $todo.modifyOk(key, value) })
+    },
+    modifyOk: function(key, value){
+        console.log(key, value);
+        const elem = document.querySelector(`#item-${key}`);
+        const cont = elem.querySelector(".cont");
+        cont.innerText = value;
+        
+        $todo.todos.forEach((e, i)=>{ if( e.id == key ) e.content = value })
+        $todo.setTodo();
+    }
+}

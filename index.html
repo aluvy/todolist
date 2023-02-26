@@ -7,20 +7,12 @@
     <meta name = "format-detection" content = "telephone=no">
     <title>To Do List</title>
     <link rel="shortcut icon" href="./favicon.png" type="image/x-icon">
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style.css">
-    <script>
-        // 아이폰에서 주소 입력창을 위로 올려준다
-        // <![CDATA[
-        try {
-            window.addEventListener('load', function(){
-            setTimeout(scrollTo, 0, 0, 1); 
-            }, false);
-        } 
-        catch(e) {}
-        // ]]>
-    </script>
+
+    <script src="script.js"></script>
 </head>
 <body>
 
@@ -31,44 +23,18 @@
             <p>If you enter the contents and click Add, a list will be generated.</p>
         </h1>
         
-        <form class="enter_area">
+        <form id="form" class="enter_area">
             <label for="inputtxt">내용을 입력하세요</label>
             <input type="text" id="inputtxt" maxlength="70" placeholder="내용을 입력하세요">
-            <button type="submit">Add</button>
+            <button type="submit" id="submit">Add</button>
         </form>
         <div class="warning"></div>
     </header>
 
-
     <div class="list_area">
         <p class="notice">If you enter the contents and click Add, a list will be generated.</p>
-        <template>
-            <!-- <dd> -->
-                <span class="chk">
-                    <input type="checkbox" id="cb-11">
-                    <label for="cb-11"></label>
-                </span>
-                <span class="cont">1</span>
-                <span class="fuct">
-                    <button class="btn_modify" type="button"><i class="fas fa-pen"></i></button>
-                    <button class="btn_del" type="button"><i class="fas fa-trash-alt"></i></button>
-                </span>
-            <!-- </dd> -->
-        </template>
-        <dl>
-            <!-- list -->
-        </dl>
-        <div class="delchk">
-            <p>해당 리스트를 삭제하시겠습니까?</p>
-            <button type="button">예</button>
-            <a href="#">아니오</a>
-        </div>
-        <div class="delchk_bg"></div>
-        
+        <dl id="todolist"></dl>        
     </div>
 </div><!-- .body_wrap -->
-
-<script src="script.js"></script>
-
 </body>
 </html>
