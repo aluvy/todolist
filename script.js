@@ -102,7 +102,7 @@ const $todo = {
     },
     openModify: function(key, value){
         const elem = document.querySelector(`#item-${key}`);
-        if( elem.classList.value.includes("chked") ) return;
+        if( elem.classList.value.includes("chked") || elem.classList.value.includes("modify") ) return;
 
         const cont = elem.querySelector(".cont");
         const input = document.createElement("input");
